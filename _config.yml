@@ -1,0 +1,24 @@
+title: "NUTS – NATS to SSE for Caddy"
+description: "A Caddy Server module that bridges NATS.io JetStream messages to Server-Sent Events (SSE)"
+url: "https://nuts.idct.tech"
+baseurl: ""
+
+permalink: pretty
+
+markdown: kramdown
+highlighter: rouge
+
+exclude:
+  - node_modules
+  - Gemfile
+  - Gemfile.lock
+  - package.json
+  - package-lock.json
+  - postcss.config.js
+  - tailwind.config.js
+  - AGENTS.md
+  - README.md
+  - vendor
+
+plugins:
+  - jekyll-seo-tag
