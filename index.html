@@ -9,34 +9,57 @@ description: "A Caddy Server module that bridges NATS.io JetStream messages to S
   <div class="max-w-4xl mx-auto px-4 py-24 text-center">
     <img src="{{ '/media/nuts-logo.png' | relative_url }}" alt="NUTS – NATS to SSE for Caddy" class="max-w-xs md:max-w-sm mx-auto mb-8">
     <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight text-gray-900">
-      NUTS
+      Real-time NATS in the browser
     </h1>
-    <p class="mt-4 text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto">
-      Bridge <strong>NATS JetStream</strong> messages to the browser via <strong>Server-Sent Events</strong>. A drop-in Caddy module.
+    <p class="mt-6 text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto">
+      A Caddy module that streams <strong>NATS JetStream</strong> straight to the browser over <strong>Server-Sent Events</strong> &mdash;
+      with replay, multi-topic subscriptions, JWT auth, Prometheus metrics, and slow-client safety baked in.
+    </p>
+    <p class="mt-4 text-base text-gray-500 max-w-2xl mx-auto">
+      Drop it into your Caddyfile, point it at JetStream, and your frontend gets a durable, replayable event stream.
     </p>
     <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
       <a href="{{ '/docs/building/' | relative_url }}" class="inline-block px-6 py-3 rounded-lg bg-nuts-600 text-white font-semibold hover:bg-nuts-700 transition">
         Get Started
       </a>
+      <a href="{{ '/features/' | relative_url }}" class="inline-block px-6 py-3 rounded-lg border border-gray-300 text-gray-700 font-semibold hover:border-nuts-400 transition">
+        See Features
+      </a>
       <a href="https://github.com/ideaconnect/nuts" class="inline-block px-6 py-3 rounded-lg border border-gray-300 text-gray-700 font-semibold hover:border-nuts-400 transition">
         View on GitHub
+      </a>
+    </div>
+    <div class="mt-6">
+      <a href="#quick-example" class="text-nuts-700 hover:text-nuts-800 font-medium text-sm inline-flex items-center gap-1">
+        Jump to the 5-minute Quick Example
+        <span aria-hidden="true">&darr;</span>
       </a>
     </div>
   </div>
 </section>
 
-<!-- Install snippet -->
+<!-- Install snippets -->
 <section class="max-w-4xl mx-auto px-4 py-16">
-  <div class="rounded-xl bg-gray-900 text-gray-100 p-6 text-sm font-mono overflow-x-auto">
-    <span class="text-gray-500">$</span> xcaddy build --with github.com/ideaconnect/nuts
+  <div class="grid md:grid-cols-2 gap-6">
+    <div>
+      <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Build with xcaddy</h3>
+      <div class="code-block group relative rounded-xl overflow-hidden bg-[#282c34]"><pre><code class="language-bash">xcaddy build --with github.com/ideaconnect/nuts</code></pre></div>
+    </div>
+    <div>
+      <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Or run with Docker</h3>
+      <div class="code-block group relative rounded-xl overflow-hidden bg-[#282c34]"><pre><code class="language-bash">docker run -d -p 8080:8080 \
+  -e NATS_URL=nats://host.docker.internal:4222 \
+  -v ./Caddyfile:/app/Caddyfile:ro \
+  idcttech/nuts:latest</code></pre></div>
+    </div>
   </div>
 </section>
 
 <!-- Features -->
 <section class="max-w-5xl mx-auto px-4 py-16">
-  <h2 class="text-3xl font-bold text-center text-gray-900">Features</h2>
+  <h2 class="text-3xl font-bold text-center text-gray-900">What's in the box</h2>
   <div class="mt-12 grid md:grid-cols-3 gap-8">
-    {% assign features = "Real-time SSE streaming|Stream NATS messages to browsers instantly via EventSource,JetStream persistence|Messages stored in NATS JetStream — replay on reconnect,Message replay|Resume from any point with last-id or Last-Event-ID,Multiple topics|Subscribe to many NATS subjects in a single connection,No message drops|Slow clients are disconnected cleanly so they can replay,Caddy native|First-class Caddy module — configure via Caddyfile or JSON" | split: "," %}
+    {% assign features = "Real-time SSE streaming|Stream NATS messages to browsers instantly via EventSource,JetStream persistence|Messages stored in NATS JetStream — replay on reconnect,Message replay|Resume from any point with last-id or Last-Event-ID,Multiple topics|Subscribe to many NATS subjects in a single connection,Slow-client safety|Backpressure-aware — slow clients are disconnected cleanly so they can replay,JWT subscriber auth|HMAC-signed JWT with per-topic subscribe claims,Prometheus metrics|Built-in nuts_* counters and gauges for ops visibility,NATS TLS / mTLS|Encrypted and mutually-authenticated NATS connections,Caddy native|First-class Caddy module — configure via Caddyfile or JSON" | split: "," %}
     {% for feature in features %}
       {% assign parts = feature | split: "|" %}
       <div class="p-6 rounded-xl border border-gray-200 hover:border-nuts-300 transition">
@@ -45,59 +68,126 @@ description: "A Caddy Server module that bridges NATS.io JetStream messages to S
       </div>
     {% endfor %}
   </div>
+  <div class="mt-10 text-center">
+    <a href="{{ '/features/' | relative_url }}" class="inline-block px-6 py-3 rounded-lg border border-gray-300 text-gray-700 font-semibold hover:border-nuts-400 transition">
+      Explore all features
+    </a>
+  </div>
 </section>
 
 <!-- Quick example -->
-<section class="bg-gray-50">
+<section id="quick-example" class="bg-gray-50 scroll-mt-16">
   <div class="max-w-4xl mx-auto px-4 py-16">
-    <h2 class="text-3xl font-bold text-center text-gray-900">Quick Example</h2>
+    <h2 class="text-3xl font-bold text-center text-gray-900">5-Minute Quick Example</h2>
+    <p class="mt-4 text-center text-gray-600 max-w-2xl mx-auto">
+      End-to-end with Docker: spin up NATS, create a stream, run NUTS, open a browser page, and watch messages arrive in real time.
+    </p>
 
-    <div class="mt-10 grid md:grid-cols-2 gap-6">
-      <!-- Caddyfile -->
-      <div>
-        <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Caddyfile</h3>
-        <div class="rounded-xl bg-gray-900 text-gray-100 p-5 text-sm font-mono overflow-x-auto">
-<pre>:8080 {
+    <ol class="mt-16 relative space-y-20">
+      <!-- vertical timeline rail -->
+      <span aria-hidden="true" class="hidden md:block absolute left-7 top-2 bottom-2 w-px bg-gradient-to-b from-nuts-200 via-nuts-200 to-transparent"></span>
+
+      <!-- Step 1 -->
+      <li class="relative">
+        <div class="flex items-center gap-5 mb-6">
+          <span class="relative z-10 flex-shrink-0 w-14 h-14 rounded-full bg-gradient-to-br from-nuts-500 to-nuts-700 text-white font-bold text-xl flex items-center justify-center shadow-lg ring-8 ring-gray-50">1</span>
+          <h3 class="text-xl md:text-2xl font-semibold text-gray-900">Create a Docker network and launch NATS</h3>
+        </div>
+        <p class="text-gray-600 mb-5 md:ml-[4.75rem]">A shared network lets the containers talk by name. JetStream is enabled with <code class="text-xs bg-gray-200 px-1.5 py-0.5 rounded">-js</code>.</p>
+        <div class="code-block group relative rounded-xl overflow-hidden bg-[#282c34] shadow-md"><pre><code class="language-bash">docker network create nuts-demo
+
+docker run -d --name nats --network nuts-demo \
+  -p 4222:4222 nats:2.12-alpine -js</code></pre></div>
+      </li>
+
+      <!-- Step 2 -->
+      <li class="relative">
+        <div class="flex items-center gap-5 mb-6">
+          <span class="relative z-10 flex-shrink-0 w-14 h-14 rounded-full bg-gradient-to-br from-nuts-500 to-nuts-700 text-white font-bold text-xl flex items-center justify-center shadow-lg ring-8 ring-gray-50">2</span>
+          <h3 class="text-xl md:text-2xl font-semibold text-gray-900">Create a JetStream stream</h3>
+        </div>
+        <p class="text-gray-600 mb-5 md:ml-[4.75rem]">Use <code class="text-xs bg-gray-200 px-1.5 py-0.5 rounded">nats-box</code> as a one-shot CLI on the same network.</p>
+        <div class="code-block group relative rounded-xl overflow-hidden bg-[#282c34] shadow-md"><pre><code class="language-bash">docker run --rm --network nuts-demo natsio/nats-box:latest \
+  nats -s nats://nats:4222 stream add EVENTS \
+    --subjects "events.&gt;" --storage file --retention limits \
+    --max-msgs 10000 --max-age 24h --discard old --defaults</code></pre></div>
+      </li>
+
+      <!-- Step 3 -->
+      <li class="relative">
+        <div class="flex items-center gap-5 mb-6">
+          <span class="relative z-10 flex-shrink-0 w-14 h-14 rounded-full bg-gradient-to-br from-nuts-500 to-nuts-700 text-white font-bold text-xl flex items-center justify-center shadow-lg ring-8 ring-gray-50">3</span>
+          <h3 class="text-xl md:text-2xl font-semibold text-gray-900">Write a Caddyfile and launch NUTS</h3>
+        </div>
+        <p class="text-gray-600 mb-5 md:ml-[4.75rem]">Save this as <code class="text-xs bg-gray-200 px-1.5 py-0.5 rounded">Caddyfile</code> in your working directory:</p>
+        <div class="code-block group relative rounded-xl overflow-hidden bg-[#282c34] shadow-md"><pre><code class="language-nginx">:8080 {
   route /events* {
     nuts {
-      nats_url  nats://localhost:4222
+      nats_url    nats://nats:4222
       stream_name EVENTS
       topic_prefix events.
     }
   }
-}</pre>
-        </div>
-      </div>
+}</code></pre></div>
+        <p class="text-gray-600 mt-6 mb-5 md:ml-[4.75rem]">Then run NUTS, mounting that file:</p>
+        <div class="code-block group relative rounded-xl overflow-hidden bg-[#282c34] shadow-md"><pre><code class="language-bash">docker run -d --name nuts --network nuts-demo \
+  -p 8080:8080 \
+  -v $(pwd)/Caddyfile:/app/Caddyfile:ro \
+  idcttech/nuts:latest</code></pre></div>
+      </li>
 
-      <!-- Client JS -->
-      <div>
-        <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-3">Client (JavaScript)</h3>
-        <div class="rounded-xl bg-gray-900 text-gray-100 p-5 text-sm font-mono overflow-x-auto">
-<pre>const es = new EventSource(
-  '/events?topic=my-topic'
-);
-
-es.addEventListener('message', (e) =&gt; {
-  const data = JSON.parse(e.data);
-  console.log(data.topic, data.payload);
-});</pre>
+      <!-- Step 4 -->
+      <li class="relative">
+        <div class="flex items-center gap-5 mb-6">
+          <span class="relative z-10 flex-shrink-0 w-14 h-14 rounded-full bg-gradient-to-br from-nuts-500 to-nuts-700 text-white font-bold text-xl flex items-center justify-center shadow-lg ring-8 ring-gray-50">4</span>
+          <h3 class="text-xl md:text-2xl font-semibold text-gray-900">Drop in a tiny HTML page</h3>
         </div>
-      </div>
+        <p class="text-gray-600 mb-5 md:ml-[4.75rem]">Save as <code class="text-xs bg-gray-200 px-1.5 py-0.5 rounded">demo.html</code> and open it in a browser:</p>
+        <div class="code-block group relative rounded-xl overflow-hidden bg-[#282c34] shadow-md"><pre><code class="language-html">&lt;!doctype html&gt;
+&lt;html&gt;
+&lt;body&gt;
+  &lt;h1&gt;NUTS demo&lt;/h1&gt;
+  &lt;ul id="messages"&gt;&lt;/ul&gt;
+  &lt;script&gt;
+    const es = new EventSource(
+      'http://localhost:8080/events?topic=demo'
+    );
+    es.addEventListener('message', (e) =&gt; {
+      const data = JSON.parse(e.data);
+      const li = document.createElement('li');
+      li.textContent = data.topic + ': ' + JSON.stringify(data.payload);
+      document.getElementById('messages').appendChild(li);
+    });
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre></div>
+      </li>
+
+      <!-- Step 5 -->
+      <li class="relative">
+        <div class="flex items-center gap-5 mb-6">
+          <span class="relative z-10 flex-shrink-0 w-14 h-14 rounded-full bg-gradient-to-br from-nuts-500 to-nuts-700 text-white font-bold text-xl flex items-center justify-center shadow-lg ring-8 ring-gray-50">5</span>
+          <h3 class="text-xl md:text-2xl font-semibold text-gray-900">Publish a few messages</h3>
+        </div>
+        <p class="text-gray-600 mb-5 md:ml-[4.75rem]">Each <code class="text-xs bg-gray-200 px-1.5 py-0.5 rounded">nats pub</code> shows up live in the browser.</p>
+        <div class="code-block group relative rounded-xl overflow-hidden bg-[#282c34] shadow-md"><pre><code class="language-bash">docker run --rm --network nuts-demo natsio/nats-box:latest \
+  nats -s nats://nats:4222 pub events.demo '{"hello": "world"}'
+
+docker run --rm --network nuts-demo natsio/nats-box:latest \
+  nats -s nats://nats:4222 pub events.demo '{"order": 42, "status": "shipped"}'</code></pre></div>
+      </li>
+
+    </ol>
+
+    <div class="mt-12 text-center">
+      <a href="{{ '/docs/usage/' | relative_url }}" class="inline-block px-6 py-3 rounded-lg border border-gray-300 text-gray-700 font-semibold hover:border-nuts-400 transition">
+        Full configuration reference &rarr;
+      </a>
     </div>
-  </div>
-</section>
 
-<!-- Inspiration -->
-<section class="max-w-4xl mx-auto px-4 py-16">
-  <h2 class="text-3xl font-bold text-center text-gray-900">Inspired by Mercure</h2>
-  <p class="mt-4 text-center text-gray-600 max-w-2xl mx-auto">
-    NUTS is deeply inspired by <a href="https://mercure.rocks/" class="text-nuts-600 hover:underline">Mercure</a> and wouldn't exist without it.
-    Not a competitor — a complementary tool for teams already running NATS.
-  </p>
-  <div class="mt-10 text-center">
-    <a href="{{ '/docs/inspiration/' | relative_url }}" class="inline-block px-6 py-3 rounded-lg border border-gray-300 text-gray-700 font-semibold hover:border-nuts-400 transition">
-      Read the Full Story
-    </a>
+    <p class="mt-12 text-center text-sm text-gray-500 max-w-2xl mx-auto">
+      NUTS is inspired by <a href="https://mercure.rocks/" class="text-nuts-600 hover:underline">Mercure</a>, built for teams already running NATS.
+    </p>
   </div>
 </section>
 

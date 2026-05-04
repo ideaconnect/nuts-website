@@ -1,0 +1,232 @@
+---
+layout: default
+title: "Features – NUTS"
+description: "Everything NUTS gives you — SSE streaming from NATS JetStream, replay, JWT auth, TLS, Prometheus metrics, slow-client safety, and more."
+permalink: /features/
+---
+
+<!-- Hero -->
+<section class="bg-gradient-to-br from-nuts-50 to-white">
+  <div class="max-w-4xl mx-auto px-4 py-24 text-center">
+    <h1 class="text-5xl md:text-6xl font-extrabold tracking-tight text-gray-900">
+      Features
+    </h1>
+    <p class="mt-6 text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto">
+      NUTS turns a NATS JetStream into a browser-friendly, replayable event stream &mdash;
+      with the operational guard rails you need to run it in production.
+    </p>
+  </div>
+</section>
+
+<!-- Streaming -->
+<section class="max-w-5xl mx-auto px-4 py-16">
+  <h2 class="text-3xl font-bold text-gray-900">Streaming</h2>
+  <div class="mt-8 grid md:grid-cols-2 gap-6">
+    <div class="p-6 rounded-xl border border-gray-200">
+      <h3 class="font-semibold text-lg text-gray-900">Real-time SSE</h3>
+      <p class="mt-2 text-gray-600 text-sm">
+        Stream NATS messages directly to browsers using the standard
+        <code>EventSource</code> API. No WebSocket bridge, no polling, no client SDK.
+      </p>
+    </div>
+    <div class="p-6 rounded-xl border border-gray-200">
+      <h3 class="font-semibold text-lg text-gray-900">Multiple topics per connection</h3>
+      <p class="mt-2 text-gray-600 text-sm">
+        Subscribe to several NATS subjects in a single SSE stream via repeated
+        <code>?topic=</code> params or path-based shorthand.
+      </p>
+    </div>
+    <div class="p-6 rounded-xl border border-gray-200">
+      <h3 class="font-semibold text-lg text-gray-900">Topic prefixing</h3>
+      <p class="mt-2 text-gray-600 text-sm">
+        Apply a server-side <code>topic_prefix</code> so clients use friendly
+        names while NUTS subscribes to the fully-qualified NATS subjects.
+      </p>
+    </div>
+    <div class="p-6 rounded-xl border border-gray-200">
+      <h3 class="font-semibold text-lg text-gray-900">Heartbeat keep-alives</h3>
+      <p class="mt-2 text-gray-600 text-sm">
+        Configurable heartbeat frames keep idle connections open through proxies
+        and CDNs.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Persistence & replay -->
+<section class="bg-gray-50">
+  <div class="max-w-5xl mx-auto px-4 py-16">
+    <h2 class="text-3xl font-bold text-gray-900">Persistence &amp; replay</h2>
+    <div class="mt-8 grid md:grid-cols-2 gap-6">
+      <div class="p-6 rounded-xl bg-white border border-gray-200">
+        <h3 class="font-semibold text-lg text-gray-900">JetStream-backed durability</h3>
+        <p class="mt-2 text-gray-600 text-sm">
+          Messages live in JetStream &mdash; NUTS just routes them to subscribers,
+          so retention, deduplication, and storage policies stay in NATS.
+        </p>
+      </div>
+      <div class="p-6 rounded-xl bg-white border border-gray-200">
+        <h3 class="font-semibold text-lg text-gray-900">Resumable streams</h3>
+        <p class="mt-2 text-gray-600 text-sm">
+          Reconnecting clients pick up exactly where they left off using
+          <code>?last-id=</code> or the standard <code>Last-Event-ID</code> header.
+          Browser <code>EventSource</code> sends the header for free.
+        </p>
+      </div>
+      <div class="p-6 rounded-xl bg-white border border-gray-200">
+        <h3 class="font-semibold text-lg text-gray-900">Replay storm guards</h3>
+        <p class="mt-2 text-gray-600 text-sm">
+          Bound large catch-ups with <code>replay_max_messages</code> and
+          <code>replay_window</code> so a single stale client can't drag the
+          server through tens of thousands of historical events.
+        </p>
+      </div>
+      <div class="p-6 rounded-xl bg-white border border-gray-200">
+        <h3 class="font-semibold text-lg text-gray-900">No silent message loss</h3>
+        <p class="mt-2 text-gray-600 text-sm">
+          Slow clients are disconnected before queued messages are dropped &mdash;
+          they reconnect with their last event ID and resume cleanly.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Security & auth -->
+<section class="max-w-5xl mx-auto px-4 py-16">
+  <h2 class="text-3xl font-bold text-gray-900">Security &amp; auth</h2>
+  <div class="mt-8 grid md:grid-cols-2 gap-6">
+    <div class="p-6 rounded-xl border border-gray-200">
+      <h3 class="font-semibold text-lg text-gray-900">JWT subscriber auth</h3>
+      <p class="mt-2 text-gray-600 text-sm">
+        HMAC-signed JWTs with per-topic <code>subscribe</code> claims, accepted
+        from <code>Authorization: Bearer</code> or a configurable cookie for
+        browser <code>EventSource</code> clients.
+      </p>
+    </div>
+    <div class="p-6 rounded-xl border border-gray-200">
+      <h3 class="font-semibold text-lg text-gray-900">NATS authentication</h3>
+      <p class="mt-2 text-gray-600 text-sm">
+        Connect to NATS using credentials files, tokens, or user/password &mdash;
+        keep the broker secured independently of subscriber auth.
+      </p>
+    </div>
+    <div class="p-6 rounded-xl border border-gray-200">
+      <h3 class="font-semibold text-lg text-gray-900">NATS TLS &amp; mTLS</h3>
+      <p class="mt-2 text-gray-600 text-sm">
+        Optional <code>nats_tls_ca</code>, <code>nats_tls_cert</code>, and
+        <code>nats_tls_key</code> directives for encrypted, mutually
+        authenticated NATS connections.
+      </p>
+    </div>
+    <div class="p-6 rounded-xl border border-gray-200">
+      <h3 class="font-semibold text-lg text-gray-900">CORS done right</h3>
+      <p class="mt-2 text-gray-600 text-sm">
+        Echoes <code>Origin</code> from the allow-list, adds <code>Vary: Origin</code>,
+        and only advertises credentials for explicitly listed origins &mdash;
+        no accidental wildcard credential leaks.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Operations -->
+<section class="bg-gray-50">
+  <div class="max-w-5xl mx-auto px-4 py-16">
+    <h2 class="text-3xl font-bold text-gray-900">Operations</h2>
+    <div class="mt-8 grid md:grid-cols-2 gap-6">
+      <div class="p-6 rounded-xl bg-white border border-gray-200">
+        <h3 class="font-semibold text-lg text-gray-900">Prometheus metrics</h3>
+        <p class="mt-2 text-gray-600 text-sm">
+          Built-in <code>nuts_*</code> counters and gauges &mdash; active connections,
+          messages delivered, slow-client disconnects, replay stats, rejected
+          connections, and more.
+        </p>
+      </div>
+      <div class="p-6 rounded-xl bg-white border border-gray-200">
+        <h3 class="font-semibold text-lg text-gray-900">Liveness &amp; readiness probes</h3>
+        <p class="mt-2 text-gray-600 text-sm">
+          Separate <code>/livez</code> and <code>/readyz</code> endpoints for
+          Kubernetes probes and load-balancer health checks &mdash; readiness
+          actually verifies the NATS connection and stream.
+        </p>
+      </div>
+      <div class="p-6 rounded-xl bg-white border border-gray-200">
+        <h3 class="font-semibold text-lg text-gray-900">Connection caps</h3>
+        <p class="mt-2 text-gray-600 text-sm">
+          <code>max_connections</code> bounds concurrent SSE streams; rejected
+          clients receive <code>503</code> with <code>Retry-After</code> instead
+          of degrading the whole instance.
+        </p>
+      </div>
+      <div class="p-6 rounded-xl bg-white border border-gray-200">
+        <h3 class="font-semibold text-lg text-gray-900">Per-frame write bounds</h3>
+        <p class="mt-2 text-gray-600 text-sm">
+          Optional <code>dispatch_timeout</code> and <code>write_timeout</code>
+          keep slow downstream connections from tying up a handler indefinitely.
+        </p>
+      </div>
+      <div class="p-6 rounded-xl bg-white border border-gray-200">
+        <h3 class="font-semibold text-lg text-gray-900">Hub discovery</h3>
+        <p class="mt-2 text-gray-600 text-sm">
+          Optional <code>Link</code> header with <code>rel="nuts"</code> lets
+          clients discover the hub URL automatically from any response that
+          carries it.
+        </p>
+      </div>
+      <div class="p-6 rounded-xl bg-white border border-gray-200">
+        <h3 class="font-semibold text-lg text-gray-900">Structured logs</h3>
+        <p class="mt-2 text-gray-600 text-sm">
+          Every stream emits structured fields &mdash; <code>topics</code>,
+          <code>subjects</code>, <code>replay_mode</code>,
+          <code>disconnect_reason</code> &mdash; ready for log aggregation and
+          incident response.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Deployment -->
+<section class="max-w-5xl mx-auto px-4 py-16">
+  <h2 class="text-3xl font-bold text-gray-900">Deployment</h2>
+  <div class="mt-8 grid md:grid-cols-3 gap-6">
+    <div class="p-6 rounded-xl border border-gray-200">
+      <h3 class="font-semibold text-lg text-gray-900">Caddy native</h3>
+      <p class="mt-2 text-gray-600 text-sm">
+        First-class Caddy module &mdash; install with <code>xcaddy</code>,
+        configure via Caddyfile or JSON, and inherit Caddy's TLS and routing.
+      </p>
+    </div>
+    <div class="p-6 rounded-xl border border-gray-200">
+      <h3 class="font-semibold text-lg text-gray-900">Prebuilt Docker image</h3>
+      <p class="mt-2 text-gray-600 text-sm">
+        Multi-arch <code>idcttech/nuts</code> image on Docker Hub for
+        <code>amd64</code> and <code>arm64</code> &mdash; mount a Caddyfile and go.
+      </p>
+    </div>
+    <div class="p-6 rounded-xl border border-gray-200">
+      <h3 class="font-semibold text-lg text-gray-900">Compose-ready</h3>
+      <p class="mt-2 text-gray-600 text-sm">
+        Reference <code>docker-compose.yml</code> in the repo brings up NATS
+        with JetStream and NUTS together for local development.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="bg-nuts-600">
+  <div class="max-w-4xl mx-auto px-4 py-16 text-center">
+    <h2 class="text-3xl font-bold text-white">Ready to wire it up?</h2>
+    <p class="mt-3 text-nuts-100">Build with xcaddy or pull the Docker image &mdash; you'll be streaming in minutes.</p>
+    <div class="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="{{ '/docs/building/' | relative_url }}" class="inline-block px-6 py-3 rounded-lg bg-white text-nuts-700 font-semibold hover:bg-nuts-50 transition">
+        Building &amp; Running
+      </a>
+      <a href="{{ '/docs/usage/' | relative_url }}" class="inline-block px-6 py-3 rounded-lg border border-white text-white font-semibold hover:bg-nuts-700 transition">
+        Configuration Reference
+      </a>
+    </div>
+  </div>
+</section>

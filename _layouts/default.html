@@ -7,7 +7,20 @@
   <meta name="description" content="{{ page.description | default: site.description }}">
   {% seo %}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.10.0/build/styles/atom-one-dark.min.css">
   <link rel="stylesheet" href="{{ '/assets/css/dist/main.css' | relative_url }}">
+  <style>
+    .code-block pre { margin: 0; }
+    .code-block pre code.hljs {
+      background: transparent;
+      padding: 1.25rem;
+      font-size: 0.875rem;
+      line-height: 1.6;
+      display: block;
+      overflow-x: auto;
+    }
+    .copy-btn.copied { background: rgb(22 163 74 / 0.85); color: #fff; opacity: 1; }
+  </style>
 </head>
 <body class="bg-white text-gray-900 antialiased">
   {% include header.html %}
@@ -17,5 +30,31 @@
   </main>
 
   {% include footer.html %}
+
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.10.0/build/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.10.0/build/languages/nginx.min.js"></script>
+  <script>
+    hljs.highlightAll();
+    document.querySelectorAll('.code-block').forEach(function (block) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'copy-btn absolute top-2.5 right-2.5 z-10 px-2.5 py-1 rounded-md bg-gray-700/70 hover:bg-gray-700 text-gray-200 text-xs font-medium opacity-0 group-hover:opacity-100 focus:opacity-100 transition';
+      btn.setAttribute('aria-label', 'Copy code');
+      btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy';
+      btn.addEventListener('click', function () {
+        var code = block.querySelector('code');
+        if (!code) return;
+        navigator.clipboard.writeText(code.innerText).then(function () {
+          btn.classList.add('copied');
+          btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied';
+          setTimeout(function () {
+            btn.classList.remove('copied');
+            btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy';
+          }, 1600);
+        });
+      });
+      block.appendChild(btn);
+    });
+  </script>
 </body>
 </html>

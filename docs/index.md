@@ -9,20 +9,25 @@ permalink: /docs/
 
 Welcome to the NUTS documentation. Choose a topic to get started:
 
-- **[Building](/docs/building/)** — Prerequisites, xcaddy, building from source, Docker, and Make targets
-- **[Usage](/docs/usage/)** — Caddyfile configuration, JetStream setup, EventSource client code, message replay, and example scenarios
-- **[Inspiration](/docs/inspiration/)** — How Mercure inspired NUTS, how the projects differ, and where NUTS is heading
-- **[Contributing](/docs/contributing/)** — Development setup, running tests, and submitting pull requests
+- **[Building & Running](/docs/building/)** — prerequisites, `xcaddy`, building from source, the prebuilt Docker image, Docker Compose, and Make targets
+- **[Usage](/docs/usage/)** — full Caddyfile / JSON configuration reference, JetStream setup, EventSource client code, replay, auth, metrics, and example scenarios
+- **[Contributing](/docs/contributing/)** — development setup, running tests, and submitting pull requests
 
-## Quick Start
+## Quick Start (Without Docker)
 
-1. **Start NATS** with JetStream enabled:
+1. **Build Caddy with NUTS:**
 
    ```bash
-   docker run -p 4222:4222 nats:latest -js
+   xcaddy build --with github.com/ideaconnect/nuts
    ```
 
-2. **Create a JetStream stream:**
+2. **Start NATS** with JetStream enabled:
+
+   ```bash
+   nats-server -js -p 4222
+   ```
+
+3. **Create a JetStream stream:**
 
    ```bash
    nats stream add EVENTS \
@@ -34,11 +39,12 @@ Welcome to the NUTS documentation. Choose a topic to get started:
      --discard old
    ```
 
-3. **Create a Caddyfile:**
+4. **Create a Caddyfile:**
 
    ```
    :8080 {
        route /events* {
+           uri strip_prefix /events
            nuts {
                nats_url nats://localhost:4222
                stream_name EVENTS
@@ -48,13 +54,13 @@ Welcome to the NUTS documentation. Choose a topic to get started:
    }
    ```
 
-4. **Run Caddy:**
+5. **Run Caddy:**
 
    ```bash
-   ./caddy run
+   ./caddy run --config Caddyfile
    ```
 
-5. **Connect from JavaScript:**
+6. **Connect from JavaScript:**
 
    ```javascript
    const events = new EventSource('/events?topic=my-topic');
@@ -65,12 +71,41 @@ Welcome to the NUTS documentation. Choose a topic to get started:
    });
    ```
 
-6. **Publish a message** (using NATS CLI):
+7. **Publish a message** (using the NATS CLI):
 
    ```bash
    nats pub events.my-topic '{"hello": "world"}'
    ```
 
+## Quick Start (With Docker)
+
+Pick whichever fits your workflow:
+
+- **Just NATS in Docker, Caddy local:**
+
+  ```bash
+  docker run --rm -p 4222:4222 nats:2.12-alpine -js
+  ```
+
+- **Prebuilt NUTS Docker image** (`idcttech/nuts`):
+
+  ```bash
+  docker run -d \
+    -p 8080:8080 \
+    -e NATS_URL=nats://host.docker.internal:4222 \
+    --add-host=host.docker.internal:host-gateway \
+    -v ./Caddyfile:/app/Caddyfile:ro \
+    idcttech/nuts:latest
+  ```
+
+- **Full stack with Docker Compose** (from the NUTS repo):
+
+  ```bash
+  docker compose up -d --build
+  ```
+
+  This starts NATS (with JetStream) and Caddy with NUTS together.
+
 For detailed configuration, client usage, and example scenarios, see the [Usage](/docs/usage/) page.
 
-For build instructions and development setup, see [Building](/docs/building/).
+For full build and run instructions, see [Building & Running](/docs/building/).
