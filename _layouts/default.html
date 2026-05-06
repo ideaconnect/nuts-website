@@ -10,14 +10,26 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.10.0/build/styles/atom-one-dark.min.css">
   <link rel="stylesheet" href="{{ '/assets/css/dist/main.css' | relative_url }}">
   <style>
-    .code-block pre { margin: 0; }
+    main .grid > * { min-width: 0; }
+    .code-block,
+    .prose pre { max-width: 100%; }
+    .code-block pre,
+    .prose pre {
+      margin: 0;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+    }
+    .code-block pre code,
     .code-block pre code.hljs {
       background: transparent;
       padding: 1.25rem;
       font-size: 0.875rem;
       line-height: 1.6;
       display: block;
-      overflow-x: auto;
+      min-width: max-content;
+    }
+    .prose :where(code):not(:where(pre code)) {
+      overflow-wrap: anywhere;
     }
     .copy-btn.copied { background: rgb(22 163 74 / 0.85); color: #fff; opacity: 1; }
   </style>
